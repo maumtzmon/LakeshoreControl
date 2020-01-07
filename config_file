@@ -1,0 +1,56 @@
+###############################################################################!!!
+#                                                                             #
+#               Configuration File for LakeShore Monitoring Model218          #
+#               LabDet-Criogenia                                              #
+#               ICN-UNAM                                                      #
+#                   Mauricio Martinez                                         #
+#                   Jaime Guerra                                              #
+###############################################################################
+
+
+#Communication parameters
+Port:/dev/ttyUSB1
+BaudRate: 9600
+TimeOut:1
+
+#Sensor parameters. 0 = 2.5v diode,  1 = 7.5v diode,  2 = 250ohm Plat, 
+#                   3 = 500ohm Plat, 4 = 5Kohm Plat,  5 = Cernox
+Sensor Type Group A: 0
+Sensor Type Group B: 5  
+
+#Sensors Status.  0=Off,1=On.
+Sensor Status 1:1
+Sensor Status 2:1
+Sensor Status 3:1
+Sensor Status 4:1
+Sensor Status 5:1
+Sensor Status 6:1
+Sensor Status 7:0
+Sensor Status 8:0
+
+
+#Curve Files. 21-28 UserCurves e.j. US21:file.curve
+
+
+
+
+
+#Curve Parameters. 0 = none, 1-5 = Standar Diode, 6-9 Standar Platinum
+#                  21-28 = User Curves, NOTE: 10-20 not used
+CP1:1
+CP2:1
+CP3:1
+CP4:1
+CP5:25
+CP6:26
+CP7:1
+CP8:1
+
+#Acquisition parameters. Channels to display 1-8, 0=all channels
+Sample Rate: none
+Channels: 0
+
+#Storage
+File Name: 9
+Extension: 10
+Average: 11
