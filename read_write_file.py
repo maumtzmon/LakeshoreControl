@@ -191,84 +191,86 @@ def LocalTime():
 #       main
 #-----------------------
 #Read Conifig File
-print('####Temp monitor lite####\n\nWatch the sensor control live.\nNOTE:To stop monitoring "Ctrl+C"\n')
-try:
-    ConfigDict_218=getDictFromConfigFile('config_file')
-    ok218Flag=True
-except:
-    print('no config for 218 detected')
-    ok218Flag=False
-try:
-    ConfigDict_335=getDictFromConfigFile('ConfigFile_M335')
-    ok335Flag=True
-except:
-    print('no config for 335 detected')
-    ok335Flag=False
+def main():
+    print('####Temp monitor lite####\n\nWatch the sensor control live.\nNOTE:To stop monitoring "Ctrl+C"\n')
+    try:
+        ConfigDict_218=getDictFromConfigFile('config_file')
+        ok218Flag=True
+    except:
+        print('no config for 218 detected')
+        ok218Flag=False
+    try:
+        ConfigDict_335=getDictFromConfigFile('ConfigFile_M335')
+        ok335Flag=True
+    except:
+        print('no config for 335 detected')
+        ok335Flag=False
 
-#print(ConfigDict) #Check If all parameters are in the Dictionary
-ConfigDict={}
-
-
-
-#config Serial Port with config_file settings
-try:
-    port_218= serial.Serial(ConfigDict_218['Port'], ConfigDict_218['BaudRate'], serial.SEVENBITS,\
-                serial.PARITY_ODD, serial.STOPBITS_ONE, float(ConfigDict_218['TimeOut']))
-    ok218Flag=True
-except:
-    print('no model 218 detected') #else
-    ok218Flag=False
-
-try:
-    port_335= serial.Serial(ConfigDict_335['Port'], ConfigDict_335['BaudRate'], serial.SEVENBITS,\
-                serial.PARITY_ODD, serial.STOPBITS_ONE, float(ConfigDict_335['TimeOut']))
-    ok335Flag=True
-except:
-    print('no model 335 detected')    #else
-    ok335Flag=False
-
-#Run Configuration Functions.
-# print a list with settings and "Done" at the end of each one
-
-#print(setSensType(ConfigDict))
-#print(setCurves(ConfigDict))
-#print(setSensOn(ConfigDict))
-#CurveDict=getDictFromCurveFile('X133491\X133491.340')
-#print(addCurve(CurveDict,26))
-#CurveDict=getDictFromCurveFile('X133492\X133492.340')
-#print(addCurve(CurveDict,25))
-
-##
-date=time.strftime("%Y%b%d", time.localtime())
-
-file=open('history_'+date+'.txt', 'a')
-file.close()
-
-while ok218Flag or ok335Flag:    
-	with open('history_'+date+'.txt', 'a', encoding="utf-8") as file:
-
-		try:
-			if ok218Flag:
-				ConfigDict=ConfigDict_218
-				string_218=getData(ConfigDict['Channels'],port_218)
-			if ok335Flag:
-				ConfigDict=ConfigDict_335
-				string_A=getData(ConfigDict['Channel 1'],port_335)
-				string_B=getData(ConfigDict['Channel 2'],port_335)
-				string_335=string_A+', '+string_B
-			if ok218Flag and ok335Flag:
-				print(LocalTime()+','+string_218+','+string_335, end='\r')
-			elif ok218Flag:
-				print(LocalTime()+','+string_218, end='\r')
-			elif ok335Flag:
-				data2print=LocalTime()+', '+string_335
-				print(data2print, end='\r')
-				file.write(data2print+'\n')
-			else:
-				print('no sensors are conected')
-		except KeyboardInterrupt:
-			print('proceso interrumpido')
-			break
+    #print(ConfigDict) #Check If all parameters are in the Dictionary
+    ConfigDict={}
 
 
-#print(diccionario['Puerto'][0])
+
+    #config Serial Port with config_file settings
+    try:
+        port_218= serial.Serial(ConfigDict_218['Port'], ConfigDict_218['BaudRate'], serial.SEVENBITS,\
+                    serial.PARITY_ODD, serial.STOPBITS_ONE, float(ConfigDict_218['TimeOut']))
+        ok218Flag=True
+    except:
+        print('no model 218 detected') #else
+        ok218Flag=False
+
+    try:
+        port_335= serial.Serial(ConfigDict_335['Port'], ConfigDict_335['BaudRate'], serial.SEVENBITS,\
+                    serial.PARITY_ODD, serial.STOPBITS_ONE, float(ConfigDict_335['TimeOut']))
+        ok335Flag=True
+    except:
+        print('no model 335 detected')    #else
+        ok335Flag=False
+
+    #Run Configuration Functions.
+    # print a list with settings and "Done" at the end of each one
+
+    #print(setSensType(ConfigDict))
+    #print(setCurves(ConfigDict))
+    #print(setSensOn(ConfigDict))
+    #CurveDict=getDictFromCurveFile('X133491\X133491.340')
+    #print(addCurve(CurveDict,26))
+    #CurveDict=getDictFromCurveFile('X133492\X133492.340')
+    #print(addCurve(CurveDict,25))
+
+    ##
+    date=time.strftime("%Y%b%d", time.localtime())
+
+    file=open('history_'+date+'.txt', 'a')
+    file.close()
+
+    while ok218Flag or ok335Flag:    
+        with open('history_'+date+'.txt', 'a', encoding="utf-8") as file:
+
+            try:
+                if ok218Flag:
+                    ConfigDict=ConfigDict_218
+                    string_218=getData(ConfigDict['Channels'],port_218)
+                if ok335Flag:
+                    ConfigDict=ConfigDict_335
+                    string_A=getData(ConfigDict['Channel 1'],port_335)
+                    string_B=getData(ConfigDict['Channel 2'],port_335)
+                    string_335=string_A+', '+string_B
+                if ok218Flag and ok335Flag:
+                    print(LocalTime()+','+string_218+','+string_335, end='\r')
+                elif ok218Flag:
+                    print(LocalTime()+','+string_218, end='\r')
+                elif ok335Flag:
+                    data2print=LocalTime()+', '+string_335
+                    print(data2print, end='\r')
+                    file.write(data2print+'\n')
+                else:
+                    print('no sensors are conected')
+            except KeyboardInterrupt:
+                print('proceso interrumpido')
+                break
+
+if __name__ == "__main__":
+    main()
+
