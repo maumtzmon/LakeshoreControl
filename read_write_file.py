@@ -16,6 +16,7 @@ in the same line
 import serial
 import time
 
+
 #get configuration from file
 def getDictFromConfigFile(configFileName):
     ConfigDict={}
@@ -182,7 +183,7 @@ def addCurve(CurveDict,Ch,index=1):
     return 'Done'
 
 def LocalTime():
-    LocalTime = time.strftime("%H:%M:%S  %Y%m%d", time.localtime())
+    LocalTime = time.strftime("%H:%M:%S  %Y-%m-%d", time.localtime())
     return LocalTime
 
 
@@ -238,27 +239,36 @@ except:
 #print(addCurve(CurveDict,25))
 
 ##
+date=time.strftime("%Y%b%d", time.localtime())
+
+file=open('history_'+date+'.txt', 'a')
+file.close()
+
 while ok218Flag or ok335Flag:    
-	try:
-		if ok218Flag:
-			ConfigDict=ConfigDict_218
-			string_218=getData(ConfigDict['Channels'],port_218)
-		if ok335Flag:
-			ConfigDict=ConfigDict_335
-			string_A=getData(ConfigDict['Channel 1'],port_335)
-			string_B=getData(ConfigDict['Channel 2'],port_335)
-			string_335=string_A+','+string_B
-		if ok218Flag and ok335Flag:
-			print(LocalTime()+','+string_218+','+string_335, end='\r')
-		elif ok218Flag:
-			print(LocalTime()+','+string_218, end='\r')
-		elif ok335Flag:
-			print(LocalTime()+','+string_335, end='\r')
-		else:
-			print('no sensors are conected')
-	except KeyboardInterrupt:
-		print('proceso interrumpido')
-		break
+	with open('history_'+date+'.txt', 'a', encoding="utf-8") as file:
+
+		try:
+			if ok218Flag:
+				ConfigDict=ConfigDict_218
+				string_218=getData(ConfigDict['Channels'],port_218)
+			if ok335Flag:
+				ConfigDict=ConfigDict_335
+				string_A=getData(ConfigDict['Channel 1'],port_335)
+				string_B=getData(ConfigDict['Channel 2'],port_335)
+				string_335=string_A+', '+string_B
+			if ok218Flag and ok335Flag:
+				print(LocalTime()+','+string_218+','+string_335, end='\r')
+			elif ok218Flag:
+				print(LocalTime()+','+string_218, end='\r')
+			elif ok335Flag:
+				data2print=LocalTime()+', '+string_335
+				print(data2print, end='\r')
+				file.write(data2print+'\n')
+			else:
+				print('no sensors are conected')
+		except KeyboardInterrupt:
+			print('proceso interrumpido')
+			break
 
 
 #print(diccionario['Puerto'][0])
